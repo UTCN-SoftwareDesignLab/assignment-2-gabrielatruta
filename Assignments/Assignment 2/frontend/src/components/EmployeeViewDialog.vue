@@ -1,8 +1,8 @@
 <template>
   <v-dialog
-      transition="dialog-bottom-transition"
-      max-width="600"
-      :value="opened"
+    transition="dialog-bottom-transition"
+    max-width="600"
+    :value="opened"
   >
     <template>
       <v-card>
@@ -16,7 +16,6 @@
         </v-form>
         <v-card-actions>
           <v-btn @click="sellItem">Sell Book</v-btn>
-
         </v-card-actions>
       </v-card>
     </template>
@@ -34,10 +33,11 @@ export default {
   },
   methods: {
     sellItem() {
-      api.items.sellBook(this.item.id, this.item.quantity).then(() => this.$emit("refresh"));
-    }
+      api.items
+        .sellBook(this.item.id, this.item.quantity)
+        .then(() => this.$emit("refresh"));
+    },
   },
-
 };
 </script>
 

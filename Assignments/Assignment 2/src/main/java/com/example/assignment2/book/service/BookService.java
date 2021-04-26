@@ -8,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -50,6 +49,20 @@ public class BookService {
         );
     }
 
+
+    public BookDTO sellBook(Long id, Long quantity) {
+
+        Book book = findByID(id);
+
+        if (book.getQuantity() < quantity)
+            return bookMapper.toDTO(book);
+
+        book.setQuantity(book.getQuantity() - quantity);
+        bookRepository.save(book);
+
+        return bookMapper.toDTO(book);
+    }
+
     public BookDTO changePrice(Long id, Long price) {
         Book book = findByID(id);
         book.setPrice(price);
@@ -78,27 +91,11 @@ public class BookService {
                 .collect(Collectors.toList());
     }
 
-    public boolean sellBook(Long id, long quantity) {
-
-        Book book = findByID(id);
-
-        if (book.getQuantity() < quantity)
-            return false;
-
-        book.setQuantity(book.getQuantity() - quantity);
-        bookRepository.save(book);
-        return true;
-    }
 
     public List<BookDTO> booksOutOfStock() {
-        List<BookDTO> outOfStock = new ArrayList<>();
 
-        List<BookDTO> noQuantity = bookRepository.findAll().stream().map(bookMapper::toDTO).collect(Collectors.toList());
-
-        for (BookDTO bookDTO: noQuantity)
-            if (bookDTO.getQuantity() == 0)
-                outOfStock.add(bookDTO);
-
-        return outOfStock;
+        return bookRepository.findAllByQuantity(0L).stream()
+                .map(bookMapper::toDTO)
+                .collect(Collectors.toList());
     }
 }

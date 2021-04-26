@@ -120,6 +120,25 @@ class BookControllerTest extends BaseControllerTest {
     }
 
     @Test
+    void sellBook() throws Exception {
+        long id = randomLong();
+        long currentQuantity = 50L;
+        long requestedQuantity = 20L;
+        BookDTO reqBook = BookDTO.builder()
+                .id(id)
+                .author(randomString())
+                .title(randomString())
+                .genre(randomString())
+                .price(randomLong())
+                .quantity(currentQuantity)
+                .build();
+        when(bookService.sellBook(id, requestedQuantity)).thenReturn(reqBook);
+        ResultActions result = performPatchWithRequestBodyAndPathVariable(BOOKS + SELL_BOOK, requestedQuantity, id);
+        result.andExpect(status().isOk())
+                .andExpect(jsonContentToBe(reqBook));
+    }
+
+    @Test
     void getBook() throws Exception {
         long id = randomLong();
         BookDTO reqBook = BookDTO.builder()
@@ -179,6 +198,7 @@ class BookControllerTest extends BaseControllerTest {
                 .andExpect(content().string(csvResponse));
 
     }
+
 
 
 }

@@ -10,24 +10,23 @@ export default {
   },
   create(user) {
     return HTTP.post(BASE_URL + "/users", user, { headers: authHeader() }).then(
-        (response) => {
-          return response.data;
-        }
+      (response) => {
+        return response.data;
+      }
     );
   },
   deleteById(id) {
-    return HTTP.delete(BASE_URL + "/users/" + id, { headers: authHeader() }).then(
-        (response) => {
-          return response.data;
-        }
-    );
+    return HTTP.delete(BASE_URL + "/users/" + id, {
+      headers: authHeader(),
+    }).then((response) => {
+      return response.data;
+    });
   },
   edit(user) {
-    return HTTP.put(BASE_URL + "/users/" + user.id, user, { headers: authHeader() }).then(
-        (response) => {
-          return response.data;
-        }
-    );
+    return HTTP.put(BASE_URL + "/users/" + user.id, user, {
+      headers: authHeader(),
+    }).then((response) => {
+      return response.data;
+    });
   },
-
 };

@@ -4,23 +4,23 @@
       Book Store
       <v-spacer></v-spacer>
       <v-text-field
-          v-model="search"
-          append-icon="mdi-magnify"
-          label="Search"
-          single-line
-          hide-details
+        v-model="search"
+        append-icon="mdi-magnify"
+        label="Search"
+        single-line
+        hide-details
       ></v-text-field>
+      <v-btn @click="searchItem">Search</v-btn>
     </v-card-title>
     <v-data-table
-        :headers="headers"
-        :items="items"
-        :search="search"
-        @click:row="editItem"
+      :headers="headers"
+      :items="items"
+      @click:row="editItem"
     ></v-data-table>
     <ItemDialogEmployee
-        :opened="dialogVisible"
-        :item="selectedItem"
-        @refresh="refreshList"
+      :opened="dialogVisible"
+      :item="selectedItem"
+      @refresh="refreshList"
     ></ItemDialogEmployee>
   </v-card>
 </template>
@@ -31,7 +31,7 @@ import ItemDialogEmployee from "@/components/EmployeeViewDialog";
 
 export default {
   name: "EmployeeView",
-  components: {ItemDialogEmployee},
+  components: { ItemDialogEmployee },
   data() {
     return {
       items: [],
@@ -55,6 +55,9 @@ export default {
     editItem(item) {
       this.selectedItem = item;
       this.dialogVisible = true;
+    },
+    async searchItem() {
+      this.items = await api.items.searchBook(this.search);
     },
 
     async refreshList() {

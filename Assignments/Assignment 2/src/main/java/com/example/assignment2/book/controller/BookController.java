@@ -1,11 +1,10 @@
 package com.example.assignment2.book.controller;
 
-import com.example.assignment2.book.service.BookService;
 import com.example.assignment2.book.model.dto.BookDTO;
+import com.example.assignment2.book.service.BookService;
 import com.example.assignment2.report.ReportServiceFactory;
 import com.example.assignment2.report.ReportType;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -40,9 +39,9 @@ public class BookController {
         return bookService.edit(id, book);
     }
 
-    @PatchMapping(ENTITY)
-    public BookDTO changePrice(@PathVariable Long id, @RequestBody Long newPrice){
-        return bookService.changePrice(id, newPrice);
+    @PatchMapping(SELL_BOOK)
+    public BookDTO sellBook(@PathVariable Long id, @RequestBody Long quantity) {
+        return bookService.sellBook(id, quantity);
     }
 
     @GetMapping(ENTITY)
@@ -66,16 +65,8 @@ public class BookController {
     }
 
     @GetMapping(SEARCH_BOOKS)
-    public List<BookDTO> searchBook(@RequestBody String genre, @RequestBody String title, @RequestBody String author) {
-        return bookService.findByGenreOrTitleOrAuthor(genre, title, author);
-    }
-
-    @PatchMapping(ENTITY + QUANTITY)
-    public ResponseEntity<?> sellBook(@PathVariable Long id, @PathVariable long quantity) {
-        if (bookService.sellBook(id, quantity))
-            return ResponseEntity.ok(quantity + " of books were sold!");
-        else
-            return ResponseEntity.badRequest().body("There aren't " + quantity + " such books!");
+    public List<BookDTO> searchBook(@PathVariable String search) {
+        return bookService.findByGenreOrTitleOrAuthor(search, search, search);
     }
 
 }
