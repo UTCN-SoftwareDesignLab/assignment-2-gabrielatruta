@@ -17,34 +17,32 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.example.assignment2.report.ReportType.*;
+import static com.example.assignment2.report.ReportType.PDF_JASPER;
 
 @Service
 @AllArgsConstructor
 public class PdfReportServiceJasper implements ReportService{
 
     private final BookService bookService;
-
-    private static final String fileName = "Books_Out_Of_Stock";
+    private static final String name = "Books_Out_Of_Stock_Jasper.pdf";
 
     public String export() {
 
-        List<BookDTO> books = bookService.booksOutOfStock();
+        List<BookDTO> outOfStock = bookService.booksOutOfStock();
 
-        Map<String, Object> parameter  = new HashMap<>();
+        Map<String, Object> type  = new HashMap<>();
 
-        JRBeanCollectionDataSource bookCollectionDataSource =
-                new JRBeanCollectionDataSource(books);
+        JRBeanCollectionDataSource bookCollectionDataSource = new JRBeanCollectionDataSource(outOfStock);
 
-        parameter.put("title", ("UNAVAILABLE BOOKS: "));
+        type.put("title", ("UNAVAILABLE BOOKS"));
 
         JasperReport jasperDesign;
         try {
             jasperDesign = JasperCompileManager.compileReport(getDesign());
 
-            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperDesign, parameter, bookCollectionDataSource);
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperDesign, type, bookCollectionDataSource);
 
-            File file = new File(fileName);
+            File file = new File(name);
 
             OutputStream outputSteam = new FileOutputStream(file);
 
@@ -53,7 +51,7 @@ public class PdfReportServiceJasper implements ReportService{
             e.printStackTrace();
         }
 
-        return "Books_Out_Of_Stock_Jasper.pdf";
+        return name;
     }
 
     @Override
@@ -62,46 +60,44 @@ public class PdfReportServiceJasper implements ReportService{
     }
 
     private JasperDesign getDesign() throws JRException {
-        JasperDesign jasDes = new JasperDesign();
-        jasDes.setName("Jasper_Report");
-        jasDes.setPageWidth(600);
-        jasDes.setPageHeight(600);
-        jasDes.setLeftMargin(13);
-        jasDes.setRightMargin(13);
-        jasDes.setTopMargin(13);
-        jasDes.setBottomMargin(13);
-        jasDes.setColumnWidth(555);
+        JasperDesign jasperDesign = new JasperDesign();
+        jasperDesign.setName("outOfStockBooks");
+        jasperDesign.setPageWidth(550);
+        jasperDesign.setPageHeight(800);
+        jasperDesign.setColumnWidth(150);
+        jasperDesign.setLeftMargin(20);
+        jasperDesign.setRightMargin(20);
+        jasperDesign.setTopMargin(15);
+        jasperDesign.setBottomMargin(15);
 
-        // Style
-        JRDesignStyle mystyle = new JRDesignStyle();
-        mystyle.setName("zala1_Style");
-        mystyle.setDefault(true);
-        mystyle.setFontSize(13f);
-        mystyle.setPdfFontName("Helvetica");
-        mystyle.setPdfEncoding("UTF-8");
-        jasDes.addStyle(mystyle);
+        JRDesignStyle style = new JRDesignStyle();
+        style.setName("Helvetica");
+        style.setDefault(true);
+        style.setFontSize(10f);
+        style.setPdfFontName("Helvetica");
+        style.setPdfEncoding("Cp1252");
+        style.setPdfEmbedded(false);
+        jasperDesign.addStyle(style);
 
-        // Fields
-        JRDesignField field1 = new JRDesignField();
-        field1.setName("Title");
-        field1.setValueClass(String.class);
-        jasDes.addField(field1);
+        JRDesignField title = new JRDesignField();
+        title.setName("title");
+        title.setValueClass(String.class);
+        jasperDesign.addField(title);
 
-        JRDesignField field2 = new JRDesignField();
-        field2.setName("Author");
-        field2.setValueClass(String.class);
-        jasDes.addField(field2);
+        JRDesignField author = new JRDesignField();
+        author.setName("author");
+        author.setValueClass(String.class);
+        jasperDesign.addField(author);
 
-        JRDesignField field3 = new JRDesignField();
-        field1.setName("Genre");
-        field1.setValueClass(String.class);
-        jasDes.addField(field3);
+        JRDesignField genre = new JRDesignField();
+        genre.setName("genre");
+        genre.setValueClass(String.class);
+        jasperDesign.addField(genre);
 
-        JRDesignField field4 = new JRDesignField();
-        field1.setName("Price");
-        field1.setValueClass(String.class);
-        jasDes.addField(field4);
-
+        JRDesignField price = new JRDesignField();
+        price.setName("price");
+        price.setValueClass(Long.class);
+        jasperDesign.addField(price);
 
         // Title
         JRDesignBand titleBand = new JRDesignBand();
@@ -116,58 +112,57 @@ public class PdfReportServiceJasper implements ReportService{
         titleText.setHorizontalTextAlign(HorizontalTextAlignEnum.CENTER);
         titleText.setFontSize(22f);
         titleBand.addElement(titleText);
-        jasDes.setTitle(titleBand);
+        jasperDesign.setTitle(titleBand);
 
-        // Detail
         JRDesignBand detailBand = new JRDesignBand();
-        detailBand.setHeight(60);
+        detailBand.setHeight(40);
 
-        JRDesignTextField tf1 = new JRDesignTextField();
-        tf1.setBlankWhenNull(true);
-        tf1.setX(0);
-        tf1.setY(10);
-        tf1.setWidth(150);
-        tf1.setHeight(30);
-        tf1.setHorizontalTextAlign(HorizontalTextAlignEnum.LEFT);
-        tf1.setStyle(mystyle);
-        tf1.setExpression(new JRDesignExpression("$F{Title}"));
-        detailBand.addElement(tf1);
+        JRDesignTextField titleField = new JRDesignTextField();
+        titleField.setBlankWhenNull(true);
+        titleField.setX(0);
+        titleField.setY(10);
+        titleField.setWidth(150);
+        titleField.setHeight(30);
+        titleField.setHorizontalTextAlign(HorizontalTextAlignEnum.LEFT);
+        titleField.setStyle(style);
+        titleField.setExpression(new JRDesignExpression("$F{title}"));
+        detailBand.addElement(titleField);
 
-        JRDesignTextField tf2 = new JRDesignTextField();
-        tf2.setBlankWhenNull(true);
-        tf2.setX(150);
-        tf2.setY(10);
-        tf2.setWidth(150);
-        tf2.setHeight(30);
-        tf2.setHorizontalTextAlign(HorizontalTextAlignEnum.LEFT);
-        tf2.setStyle(mystyle);
-        tf2.setExpression(new JRDesignExpression("$F{Author}"));
-        detailBand.addElement(tf2);
+        JRDesignTextField authorField = new JRDesignTextField();
+        authorField.setBlankWhenNull(true);
+        authorField.setX(150);
+        authorField.setY(10);
+        authorField.setWidth(150);
+        authorField.setHeight(30);
+        authorField.setHorizontalTextAlign(HorizontalTextAlignEnum.LEFT);
+        authorField.setStyle(style);
+        authorField.setExpression(new JRDesignExpression("$F{author}"));
+        detailBand.addElement(authorField);
 
-        JRDesignTextField tf3 = new JRDesignTextField();
-        tf2.setBlankWhenNull(true);
-        tf2.setX(300);
-        tf2.setY(10);
-        tf2.setWidth(150);
-        tf2.setHeight(30);
-        tf2.setHorizontalTextAlign(HorizontalTextAlignEnum.LEFT);
-        tf2.setStyle(mystyle);
-        tf2.setExpression(new JRDesignExpression("$F{Genre}"));
-        detailBand.addElement(tf3);
+        JRDesignTextField genreField = new JRDesignTextField();
+        genreField.setBlankWhenNull(true);
+        genreField.setX(300);
+        genreField.setY(10);
+        genreField.setWidth(150);
+        genreField.setHeight(30);
+        genreField.setHorizontalTextAlign(HorizontalTextAlignEnum.LEFT);
+        genreField.setStyle(style);
+        genreField.setExpression(new JRDesignExpression("$F{genre}"));
+        detailBand.addElement(genreField);
 
-        JRDesignTextField tf4 = new JRDesignTextField();
-        tf2.setBlankWhenNull(true);
-        tf2.setX(450);
-        tf2.setY(10);
-        tf2.setWidth(150);
-        tf2.setHeight(30);
-        tf2.setHorizontalTextAlign(HorizontalTextAlignEnum.LEFT);
-        tf2.setStyle(mystyle);
-        tf2.setExpression(new JRDesignExpression("$F{Price}"));
-        detailBand.addElement(tf4);
+        JRDesignTextField priceField = new JRDesignTextField();
+        priceField.setBlankWhenNull(true);
+        priceField.setX(450);
+        priceField.setY(10);
+        priceField.setWidth(150);
+        priceField.setHeight(30);
+        priceField.setHorizontalTextAlign(HorizontalTextAlignEnum.LEFT);
+        priceField.setStyle(style);
+        priceField.setExpression(new JRDesignExpression("$F{price}"));
+        detailBand.addElement(priceField);
 
-        ((JRDesignSection) jasDes.getDetailSection()).addBand(detailBand);
+        ((JRDesignSection) jasperDesign.getDetailSection()).addBand(detailBand);
 
-        return jasDes;
+        return jasperDesign;
     }
 }

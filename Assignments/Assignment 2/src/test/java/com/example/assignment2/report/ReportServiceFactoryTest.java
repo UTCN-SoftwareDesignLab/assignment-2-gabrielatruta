@@ -8,17 +8,13 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import static com.example.assignment2.report.ReportType.CSV;
-import static com.example.assignment2.report.ReportType.PDF_BOX;
+import static com.example.assignment2.report.ReportType.*;
 
 @SpringBootTest
 class ReportServiceFactoryTest {
 
     @Autowired
     private ReportServiceFactory reportServiceFactory;
-
-    @Autowired
-    private PdfReportServiceJasper pdfReportServiceJasper;
 
     @Autowired
     private BookService bookService;
@@ -52,6 +48,7 @@ class ReportServiceFactoryTest {
         ReportService csvReportService = reportServiceFactory.getReportService(CSV);
         Assertions.assertEquals("Books_Out_Of_Stock.csv", csvReportService.export());
 
+        ReportService pdfReportServiceJasper = reportServiceFactory.getReportService(PDF_JASPER);
         Assertions.assertEquals("Books_Out_Of_Stock_Jasper.pdf", pdfReportServiceJasper.export());
 
     }

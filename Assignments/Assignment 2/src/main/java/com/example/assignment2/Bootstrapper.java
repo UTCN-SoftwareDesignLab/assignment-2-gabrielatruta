@@ -72,6 +72,15 @@ public class Bootstrapper implements ApplicationListener<ApplicationReadyEvent> 
                     .quantity(0L)
                     .build());
 
+            bookRepository.save(Book.builder()
+                    .id(-1L)
+                    .title("Uncle Tom's Cabin")
+                    .author("Harriet Beecher Stowe")
+                    .genre("Historical Fiction")
+                    .price(33L)
+                    .quantity(10L)
+                    .build());
+
         }
     }
 }
