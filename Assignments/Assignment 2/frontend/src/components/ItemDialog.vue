@@ -22,7 +22,6 @@
           </v-btn>
 
           <v-btn v-if="!isNew" @click="deleteItem">Delete</v-btn>
-
         </v-card-actions>
       </v-card>
     </template>

@@ -60,7 +60,7 @@ public class BookRepositoryTest {
 
         bookRepository.save(book);
 
-        List<Book> result = bookRepository.findAllByGenreContainingOrTitleContainingOrAuthorContaining("aaaa", "To kill", "ajaja");
+        List<Book> result = bookRepository.findAllByGenreContainingOrTitleContainingOrAuthorContaining("", "To kill", "");
         assertFalse(result.isEmpty());
         assertEquals(1, result.size());
         assertEquals(book.getId(), result.get(0).getId());

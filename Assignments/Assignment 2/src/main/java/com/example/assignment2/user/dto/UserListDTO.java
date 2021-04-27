@@ -13,7 +13,8 @@ import java.util.Set;
 @AllArgsConstructor
 public class UserListDTO extends UserMinimalDTO {
     private String email;
-    private String password;
     private Set<String> roles;
+    private String password;
+
 }
 

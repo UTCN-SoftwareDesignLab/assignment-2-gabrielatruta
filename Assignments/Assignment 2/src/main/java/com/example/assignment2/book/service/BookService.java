@@ -62,14 +62,6 @@ public class BookService {
         return bookMapper.toDTO(book);
     }
 
-    public BookDTO changePrice(Long id, Long price) {
-        Book book = findByID(id);
-        book.setPrice(price);
-        return bookMapper.toDTO(
-                bookRepository.save(book)
-        );
-    }
-
     public BookDTO get(Long id) {
         return bookMapper.toDTO(
                 findByID(id)

@@ -11,7 +11,7 @@
         hide-details
       ></v-text-field>
 
-      <v-btn @click="addItem">Add User</v-btn>
+      <v-btn @click="addUser">Add User</v-btn>
       <v-btn @click="viewBooks">Library</v-btn>
     </v-card-title>
     <v-data-table
@@ -46,8 +46,7 @@ export default {
           align: "start",
           value: "email",
         },
-        { text: "Username", value: "username" },
-        { text: "Password", value: "password" },
+        { text: "Username", value: "name" },
         { text: "Roles", value: "roles" },
       ],
       dialogVisible: false,
@@ -59,7 +58,7 @@ export default {
       this.selectedItem = user;
       this.dialogVisible = true;
     },
-    addItem() {
+    addUser() {
       this.dialogVisible = true;
     },
 

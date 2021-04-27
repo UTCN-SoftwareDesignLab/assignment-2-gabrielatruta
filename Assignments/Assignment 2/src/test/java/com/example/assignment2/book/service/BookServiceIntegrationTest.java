@@ -35,5 +35,4 @@ class BookServiceIntegrationTest {
        assertEquals(books.size(), all.size());
     }
 
-
 }

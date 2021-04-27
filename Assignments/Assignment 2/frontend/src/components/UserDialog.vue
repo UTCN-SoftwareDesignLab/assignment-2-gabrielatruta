@@ -11,12 +11,12 @@
         </v-toolbar>
         <v-form>
           <v-text-field v-model="item.email" label="Email" />
+          <v-text-field v-model="item.name" label="Username" />
           <v-text-field v-model="item.password" label="Password" />
-          <v-text-field v-model="item.username" label="Username" />
         </v-form>
         <v-card-actions>
           <v-btn @click="persist">
-            {{ isNew ? "Create" : "Save" }}
+            {{ isNew ? "Create" : "Edit" }}
           </v-btn>
 
           <v-btn v-if="!isNew" @click="deleteItem">Delete</v-btn>
@@ -41,8 +41,8 @@ export default {
         api.users
           .create({
             email: this.item.email,
+            username: this.item.name,
             password: this.item.password,
-            username: this.item.username,
           })
           .then(() => this.$emit("refresh"));
       } else {
@@ -50,8 +50,8 @@ export default {
           .edit({
             id: this.item.id,
             email: this.item.email,
+            username: this.item.name,
             password: this.item.password,
-            username: this.item.username,
           })
           .then(() => this.$emit("refresh"));
       }

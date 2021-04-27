@@ -120,6 +120,4 @@ class UserControllerTest extends BaseControllerTest {
                 .andExpect(jsonContentToBe(user));
     }
 
-
-
 }

@@ -10,7 +10,6 @@ import javax.validation.constraints.Email;
 import java.util.HashSet;
 import java.util.Set;
 
-
 @Entity
 @Table(
         uniqueConstraints = {

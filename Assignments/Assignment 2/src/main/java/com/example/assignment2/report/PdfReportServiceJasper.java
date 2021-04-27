@@ -113,7 +113,7 @@ public class PdfReportServiceJasper implements ReportService{
         price.setValueClass(Long.class);
         jasperDesign.addField(price);
 
-        // Title
+
         JRDesignBand titleBand = new JRDesignBand();
         titleBand.setHeight(50);
 

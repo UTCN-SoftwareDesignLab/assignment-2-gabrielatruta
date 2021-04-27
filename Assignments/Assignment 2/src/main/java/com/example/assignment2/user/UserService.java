@@ -12,6 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import javax.validation.constraints.Email;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -45,6 +46,7 @@ public class UserService {
                 .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + id));
     }
 
+    @Email
     public UserDTO create(UserDTO user) {
         Role defaultRole = roleRepository.findByName(ERole.EMPLOYEE)
                 .orElseThrow(() -> new RuntimeException("Cannot find EMPLOYEE role"));
@@ -52,10 +54,12 @@ public class UserService {
         Set<Role> roles = new HashSet<>();
         roles.add(defaultRole);
         user1.setRoles(roles);
+        user1.setPassword(passwordEncoder.encode(user.getPassword()));
         
         return userMapper.toDTO(userRepository.save(user1));
     }
 
+    @Email
     public UserDTO edit(Long id, UserDTO user) {
         User actUser = findById(id);
         actUser.setEmail(user.getEmail());

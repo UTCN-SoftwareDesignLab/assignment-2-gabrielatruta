@@ -65,12 +65,6 @@ public abstract class BaseControllerTest {
                 .accept(MediaType.APPLICATION_JSON));
     }
 
-    protected ResultActions performSellBook(String path, Object body, Object quantity) throws Exception{
-        return mockMvc.perform(post(path,body,quantity)
-                .content(asJsonString(body))
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON));
-    }
 
     protected String asJsonString(final Object obj) {
         if(obj instanceof String) return obj.toString();
