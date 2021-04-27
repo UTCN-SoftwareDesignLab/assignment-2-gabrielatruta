@@ -21,7 +21,9 @@ public interface UserMapper {
 
     @Mappings({
             @Mapping(target = "name", source = "user.username"),
+            @Mapping(target = "password", ignore = true),
             @Mapping(target = "roles", ignore = true)
+
     })
     UserListDTO userListDtoFromUser(User user);
 

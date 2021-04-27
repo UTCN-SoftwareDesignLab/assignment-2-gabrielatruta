@@ -31,29 +31,51 @@ export default {
   },
   pdfBox() {
     return HTTP.get(BASE_URL + "/books/export/PDF_BOX", {
+      responseType: "arraybuffer",
       headers: authHeader(),
     }).then((response) => {
-      return response.data;
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", "Books_Out_Of_Stock_PDFBox.pdf");
+      document.body.appendChild(link);
+      link.click();
     });
   },
   pdfJasper() {
     return HTTP.get(BASE_URL + "/books/export/PDF_JASPER", {
+      responseType: "arraybuffer",
       headers: authHeader(),
     }).then((response) => {
-      return response.data;
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", "Books_Out_Of_Stock_PDFJasper.pdf");
+      document.body.appendChild(link);
+      link.click();
     });
   },
   csv() {
     return HTTP.get(BASE_URL + "/books/export/CSV", {
+      responseType: "arraybuffer",
       headers: authHeader(),
     }).then((response) => {
-      return response.data;
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", "Books_Out_Of_Stock.csv");
+      document.body.appendChild(link);
+      link.click();
     });
   },
   sellBook(id, quantity) {
-    return HTTP.patch(BASE_URL + "/books/sell/" + id, quantity, {
-      headers: authHeader(),
-    }).then((response) => {
+    return HTTP.patch(
+      BASE_URL + "/books/sell-book/" + id + "/" + quantity,
+      {},
+      {
+        headers: authHeader(),
+      }
+    ).then((response) => {
       return response.data;
     });
   },

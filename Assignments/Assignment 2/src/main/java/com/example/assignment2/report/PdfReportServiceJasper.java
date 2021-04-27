@@ -9,10 +9,7 @@ import net.sf.jasperreports.engine.design.*;
 import net.sf.jasperreports.engine.type.HorizontalTextAlignEnum;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,7 +23,7 @@ public class PdfReportServiceJasper implements ReportService{
     private final BookService bookService;
     private static final String name = "Books_Out_Of_Stock_Jasper.pdf";
 
-    public String export() {
+    public ByteArrayOutputStream export() {
 
         List<BookDTO> outOfStock = bookService.booksOutOfStock();
 
@@ -51,7 +48,24 @@ public class PdfReportServiceJasper implements ReportService{
             e.printStackTrace();
         }
 
-        return name;
+        byte[] buffer = new byte[4096];
+        BufferedInputStream bis;
+        try {
+
+            bis = new BufferedInputStream(new FileInputStream("Books_Out_Of_Stock_Jasper.pdf"));
+            ByteArrayOutputStream output = new ByteArrayOutputStream();
+
+            int bytes;
+            while ((bytes = bis.read(buffer, 0, buffer.length)) > 0) {
+                output.write(buffer, 0, bytes);
+            }
+            bis.close();
+            return  output;
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @Override

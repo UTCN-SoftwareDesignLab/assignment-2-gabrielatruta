@@ -49,7 +49,6 @@ public class BookService {
         );
     }
 
-
     public BookDTO sellBook(Long id, Long quantity) {
 
         Book book = findByID(id);

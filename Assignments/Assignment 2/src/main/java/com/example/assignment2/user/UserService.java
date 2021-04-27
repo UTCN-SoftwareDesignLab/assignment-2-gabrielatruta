@@ -61,7 +61,7 @@ public class UserService {
         actUser.setEmail(user.getEmail());
         actUser.setUsername(user.getUsername());
         actUser.setPassword(passwordEncoder.encode(user.getPassword()));
-        userRepository.deleteById(id);
+
         return userMapper.toDTO(
                 userRepository.save(actUser)
         );

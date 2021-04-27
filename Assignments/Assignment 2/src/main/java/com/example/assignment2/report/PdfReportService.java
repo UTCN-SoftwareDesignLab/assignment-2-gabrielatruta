@@ -9,6 +9,7 @@ import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.springframework.stereotype.Service;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.List;
 
@@ -21,12 +22,13 @@ public class PdfReportService implements ReportService {
     private final BookService bookService;
 
     @Override
-    public String export() {
+    public ByteArrayOutputStream export() {
         PDDocument document = new PDDocument();
         PDPage pdPage = new PDPage();
         document.addPage(pdPage);
 
         List<BookDTO> allBooks = bookService.booksOutOfStock();
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
 
         try {
             PDPageContentStream contentStream = new PDPageContentStream(document, pdPage);
@@ -57,14 +59,14 @@ public class PdfReportService implements ReportService {
 
             contentStream.endText();
             contentStream.close();
-            document.save("Books_Out_Of_Stock.pdf");
-
+            document.save(output);
+            document.close();
 
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        return "Books_Out_Of_Stock.pdf";
+        return output;
     }
 
     @Override

@@ -33,14 +33,9 @@ public class UserController {
     @DeleteMapping
     public void deleteAll() { userService.deleteAll(); }
 
-    @PutMapping(ENTITY)
+    @PatchMapping(ENTITY)
     public UserDTO edit(@PathVariable Long id, @RequestBody UserDTO user) {
         return userService.edit(id, user);
-    }
-
-    @PatchMapping(ENTITY)
-    public UserDTO changePassword(@PathVariable Long id, @RequestBody String newPassword){
-        return userService.changePassword(id, newPassword);
     }
 
     @GetMapping(ENTITY)

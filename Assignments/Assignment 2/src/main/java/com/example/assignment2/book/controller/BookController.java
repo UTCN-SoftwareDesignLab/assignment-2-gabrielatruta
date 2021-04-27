@@ -5,8 +5,13 @@ import com.example.assignment2.book.service.BookService;
 import com.example.assignment2.report.ReportServiceFactory;
 import com.example.assignment2.report.ReportType;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.ByteArrayOutputStream;
 import java.util.List;
 
 import static com.example.assignment2.URLMapping.*;
@@ -40,7 +45,7 @@ public class BookController {
     }
 
     @PatchMapping(SELL_BOOK)
-    public BookDTO sellBook(@PathVariable Long id, @RequestBody Long quantity) {
+    public BookDTO sellBook(@PathVariable Long id, @PathVariable Long quantity) {
         return bookService.sellBook(id, quantity);
     }
 
@@ -59,9 +64,20 @@ public class BookController {
         bookService.deleteAll();
     }
 
-    @GetMapping(EXPORT_REPORT)
-    public String exportReport(@PathVariable ReportType type){
-        return reportServiceFactory.getReportService(type).export();
+    @GetMapping(EXPORT_TYPE)
+    public ResponseEntity<?> exportReport(@PathVariable ReportType type){
+
+        ByteArrayOutputStream bodyOutput = reportServiceFactory.getReportService(type).export();
+        ByteArrayResource byteArrayResource = new ByteArrayResource(bodyOutput.toByteArray());
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=Books_Out_Of_Stock_PDFBox.pdf");
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .contentLength(byteArrayResource.contentLength())
+                .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                .body(byteArrayResource);
     }
 
     @GetMapping(SEARCH_BOOKS)

@@ -23,7 +23,7 @@ export default {
     });
   },
   edit(user) {
-    return HTTP.put(BASE_URL + "/users/" + user.id, user, {
+    return HTTP.patch(BASE_URL + "/users/" + user.id, user, {
       headers: authHeader(),
     }).then((response) => {
       return response.data;

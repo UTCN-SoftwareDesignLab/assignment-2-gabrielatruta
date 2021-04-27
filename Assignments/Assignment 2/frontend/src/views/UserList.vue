@@ -13,7 +13,6 @@
 
       <v-btn @click="addItem">Add User</v-btn>
       <v-btn @click="viewBooks">Library</v-btn>
-
     </v-card-title>
     <v-data-table
       :headers="headers"
@@ -22,9 +21,9 @@
       @click:row="editUser"
     ></v-data-table>
     <UserDialog
-        :opened="dialogVisible"
-        :item="selectedItem"
-        @refresh="refreshList"
+      :opened="dialogVisible"
+      :item="selectedItem"
+      @refresh="refreshList"
     ></UserDialog>
   </v-card>
 </template>
@@ -47,10 +46,12 @@ export default {
           align: "start",
           value: "email",
         },
+        { text: "Username", value: "username" },
+        { text: "Password", value: "password" },
         { text: "Roles", value: "roles" },
       ],
       dialogVisible: false,
-      selectedItem: {}
+      selectedItem: {},
     };
   },
   methods: {
@@ -62,8 +63,8 @@ export default {
       this.dialogVisible = true;
     },
 
-    viewBooks(){
-      router.push("/books")
+    viewBooks() {
+      router.push("/books");
     },
 
     async refreshList() {

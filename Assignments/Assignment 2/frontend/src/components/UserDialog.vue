@@ -1,8 +1,8 @@
 <template>
   <v-dialog
-      transition="dialog-bottom-transition"
-      max-width="600"
-      :value="opened"
+    transition="dialog-bottom-transition"
+    max-width="600"
+    :value="opened"
   >
     <template>
       <v-card>
@@ -20,7 +20,6 @@
           </v-btn>
 
           <v-btn v-if="!isNew" @click="deleteItem">Delete</v-btn>
-
         </v-card-actions>
       </v-card>
     </template>
@@ -40,27 +39,26 @@ export default {
     persist() {
       if (this.isNew) {
         api.users
-            .create({
-              email: this.item.email,
-              password: this.item.password,
-              username: this.item.username,
-            })
-            .then(() => this.$emit("refresh"));
+          .create({
+            email: this.item.email,
+            password: this.item.password,
+            username: this.item.username,
+          })
+          .then(() => this.$emit("refresh"));
       } else {
         api.users
-            .edit({
-              id: this.item.id,
-              email: this.item.email,
-              password: this.item.password,
-              username: this.item.username,
-            })
-            .then(() => this.$emit("refresh"));
+          .edit({
+            id: this.item.id,
+            email: this.item.email,
+            password: this.item.password,
+            username: this.item.username,
+          })
+          .then(() => this.$emit("refresh"));
       }
     },
     deleteItem() {
       api.users.deleteById(this.item.id).then(() => this.$emit("refresh"));
     },
-
   },
   computed: {
     isNew: function () {

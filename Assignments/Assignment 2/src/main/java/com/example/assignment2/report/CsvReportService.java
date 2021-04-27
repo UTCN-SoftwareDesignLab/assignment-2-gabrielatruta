@@ -5,8 +5,7 @@ import com.example.assignment2.book.service.BookService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,7 +17,7 @@ public class CsvReportService implements ReportService{
     private final BookService bookService;
 
     @Override
-    public String export() {
+    public ByteArrayOutputStream export() {
         List<BookDTO> books = new ArrayList<>(bookService.booksOutOfStock());
 
         try{
@@ -37,9 +36,29 @@ public class CsvReportService implements ReportService{
             }
             fileWriter.flush();
         }catch(IOException e){
-            return "Error generating CSV file!";
+            e.printStackTrace();
         }
-        return "Books_Out_Of_Stock.csv";
+
+
+        byte[] buffer = new byte[4096];
+        BufferedInputStream bis;
+        try {
+
+            bis = new BufferedInputStream(new FileInputStream("Books_Out_Of_Stock.csv"));
+            ByteArrayOutputStream output = new ByteArrayOutputStream();
+
+            int bytes;
+            while ((bytes = bis.read(buffer, 0, buffer.length)) > 0) {
+                output.write(buffer, 0, bytes);
+            }
+            bis.close();
+            return  output;
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 
     @Override

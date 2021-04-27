@@ -15,7 +15,6 @@
       <v-btn @click="exportPDFJ">Export PDF J</v-btn>
       <v-btn @click="exportCSV">Export CSV</v-btn>
       <v-btn @click="backUsers">Users</v-btn>
-
     </v-card-title>
     <v-data-table
       :headers="headers"
@@ -77,8 +76,8 @@ export default {
       api.items.csv();
     },
 
-    backUsers(){
-      router.push("/users")
+    backUsers() {
+      router.push("/users");
     },
 
     async refreshList() {
